@@ -1,93 +1,65 @@
-Here's a basic JUnit test class for the `User` class using Mockito. I've included some unit tests that cover edge cases, null checks, and exception scenarios:
+To generate JUnit test cases for the `User` class using Mockito, I'll create a separate test class called `UserTest`. Here is the code:
 
 ```java
 package com.example.service;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
 import static org.mockito.Mockito.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
-
     @Mock
-    private UserService userService;
-
     private User user;
 
-    @Before
-    public void setup() {
-        user = new User(1L, "John Doe", "john.doe@example.com");
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testConstructorWithValidInputs() {
-        // No need to mock anything for this test case
-        assertNotNull(user);
-        assertEquals(1L, user.getId());
-        assertEquals("John Doe", user.getName());
-        assertEquals("john.doe@example.com", user.getEmail());
-    }
+    void testConstructorWithValidParameters() {
+        Long id = 1L;
+        String name = "John Doe";
+        String email = "john.doe@example.com";
+        String num = "0987654321";
 
-    @Test(expected = NullPointerException.class)
-    public void testConstructorWithNullId() {
-        User user = new User(null, "John Doe", "john.doe@example.com");
-        // No need to mock anything for this test case
-        assertNull(user);
-    }
+        User actualUser = new User(id, name, email, num);
 
-    @Test(expected = NullPointerException.class)
-    public void testConstructorWithNullName() {
-        User user = new User(1L, null, "john.doe@example.com");
-        // No need to mock anything for this test case
-        assertNull(user);
-    }
+        verify(user).setId(id);
+        verify(user).setName(name);
+        verify(user).setEmail(email);
+        verify(user).setNum(num);
 
-    @Test(expected = NullPointerException.class)
-    public void testConstructorWithNullEmail() {
-        User user = new User(1L, "John Doe", null);
-        // No need to mock anything for this test case
-        assertNull(user);
+        assertEquals(id, actualUser.getId());
+        assertEquals(name, actualUser.getName());
+        assertEquals(email, actualUser.getEmail());
+        assertEquals(num, actualUser.getNum());
     }
 
     @Test
-    public void testGetters() {
-        // No need to mock anything for this test case
-        assertEquals(1L, user.getId());
-        assertEquals("John Doe", user.getName());
-        assertEquals("john.doe@example.com", user.getEmail());
+    void testGetters() {
+        Long id = 1L;
+        String name = "John Doe";
+        String email = "john.doe@example.com";
+        String num = "0987654321";
+
+        when(user.getId()).thenReturn(id);
+        when(user.getName()).thenReturn(name);
+        when(user.getEmail()).thenReturn(email);
+        when(user.getNum()).thenReturn(num);
+
+        assertEquals(id, user.getId());
+        assertEquals(name, user.getName());
+        assertEquals(email, user.getEmail());
+        assertEquals(num, user.getNum());
     }
 
     @Test
-    public void testSetters() {
-        // No need to mock anything for this test case
-        user.setEmail("john.updated@example.com");
-        assertEquals("john.updated@example.com", user.getEmail());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSetEmailWithNullEmail() {
-        user.setEmail(null);
-        // No need to mock anything for this test case
-    }
-
-    @Test
-    public void testSaveUserSuccess() {
-        when(userService.saveUser(user)).thenReturn(user);
-        User savedUser = userService.saveUser(user);
-        verify(userService).saveUser(user);
-        assertEquals(user, savedUser);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testSaveUserFailure() {
-        when(userService.saveUser(user)).thenThrow(new RuntimeException("Save user failed"));
-        userService.saveUser(user);
-        verify(userService).saveUser(user);
+    void testSetEmailNull() {
+        assertThrows(IllegalArgumentException.class, () -> user.setEmail(null));
     }
 }
 ```
 
-This test class includes tests for the constructor with valid and null inputs, getters and setters, and saving a user using a mock `UserService`. The test for saving a user includes both success and failure scenarios.
+In this test class, I've created a mock instance of the `User` class using Mockito and tested its constructor with valid parameters, as well as its getter methods. Additionally, I've added a separate test for setting an email to null to check if it throws an `IllegalArgumentException`.

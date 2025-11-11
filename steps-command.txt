@@ -9,3 +9,8 @@ pip install javalang python-dotenv requests   // install the dep
 
 
 python3 generate_tests_ollama.py  //to run the agent
+
+
+************========Automatic AI Agent============================
+
+1. pip install watchdog gitpython

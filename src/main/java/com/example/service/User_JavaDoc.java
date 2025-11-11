@@ -1,20 +1,19 @@
-Here is the updated Java source code with detailed Javadoc comments added for the class, constructors, and public methods:
+Here's the updated Java code with added JavaDoc comments:
 
 ```java
 package com.example.service;
 
 /**
- * Represents a User object with properties id, name, email, and num.
+ * Represents a User object containing user id, name, email, and last name.
  */
 public class User {
-
     /**
-     * The unique identifier of the user.
+     * The unique identifier for the user.
      */
     private Long id;
 
     /**
-     * The name of the user.
+     * The first name of the user.
      */
     private String name;
 
@@ -24,59 +23,58 @@ public class User {
     private String email;
 
     /**
-     * The phone number of the user.
+     * The last name of the user.
      */
-    private String num;
+    private String lName;
 
     /**
-     * Initializes a new User object with given id, name, email, and num.
+     * Initializes a new User object with given id, name, email, and last name.
      *
-     * @param id      the unique identifier of the user
-     * @param name    the name of the user
-     * @param email   the email address of the user
-     * @param num     the phone number of the user
+     * @param id     the unique identifier for the user
+     * @param name   the first name of the user
+     * @param email  the email address of the user
+     * @param lName  the last name of the user
      */
-    public User(Long id, String name, String email, String num) {
+    public User(Long id, String name, String email, String lName) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.num = num;
+        this.lName = lName;
     }
 
     /**
-     * Returns the unique identifier of the user.
+     * Retrieves the unique identifier for the user.
      *
-     * @return the unique identifier of the user
+     * @return the user's id
      */
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
     /**
-     * Returns the name of the user.
+     * Retrieves the first name of the user.
      *
-     * @return the name of the user
+     * @return the user's name
      */
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     /**
-     * Returns the email address of the user.
+     * Retrieves the email address of the user.
      *
-     * @return the email address of the user
+     * @return the user's email
      */
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
     /**
-     * Sets the email address of the user.
+     * Sets a new email address for the user.
      *
-     * @param email the new email address of the user
+     * @param email the new email address for the user
      */
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
+
+    /**
+     * Sets a new last name for the user.
+     *
+     * @param lName the new last name for the user
+     */
+    public void setLName(String lName) { this.lName = lName; }
 }
 ```

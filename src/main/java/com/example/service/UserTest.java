@@ -1,16 +1,24 @@
-To generate JUnit test cases for the `User` class using Mockito, I'll create a separate test class called `UserTest`. Here is the code:
+Here's a simple JUnit test class for the `User` class using Mockito. I've included edge cases, null checks, and exception scenarios.
 
 ```java
 package com.example.service;
 
-import org.junit.jupiter.api.*;
-import org.mockito.*;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class UserTest {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+class UserTest {
+
     @Mock
     private User user;
+
+    @InjectMocks
+    private UserService userService;
 
     @BeforeEach
     void setup() {
@@ -18,23 +26,36 @@ public class UserTest {
     }
 
     @Test
-    void testConstructorWithValidParameters() {
+    void testUserCreationWithValidValues() {
         Long id = 1L;
         String name = "John Doe";
         String email = "john.doe@example.com";
-        String num = "0987654321";
+        String lName = "Doe";
 
-        User actualUser = new User(id, name, email, num);
+        User createdUser = new User(id, name, email, lName);
 
-        verify(user).setId(id);
-        verify(user).setName(name);
-        verify(user).setEmail(email);
-        verify(user).setNum(num);
+        assertAll(() -> assertEquals(id, createdUser.getId()),
+                   () -> assertEquals(name, createdUser.getName()),
+                   () -> assertEquals(email, createdUser.getEmail()),
+                   () -> assertEquals(lName, createdUser.getLName()));
+    }
 
-        assertEquals(id, actualUser.getId());
-        assertEquals(name, actualUser.getName());
-        assertEquals(email, actualUser.getEmail());
-        assertEquals(num, actualUser.getNum());
+    @Test
+    void testSetEmailWithNull() {
+        String nullEmail = null;
+        userService.setEmail(user, nullEmail);
+
+        verify(user).setEmail(null);
+        assertThrows(IllegalArgumentException.class, () -> userService.setEmail(user, nullEmail));
+    }
+
+    @Test
+    void testSetLNameWithNull() {
+        String nullLName = null;
+        userService.setLName(user, nullLName);
+
+        verify(user).setLName(null);
+        assertThrows(IllegalArgumentException.class, () -> userService.setLName(user, nullLName));
     }
 
     @Test
@@ -42,24 +63,16 @@ public class UserTest {
         Long id = 1L;
         String name = "John Doe";
         String email = "john.doe@example.com";
-        String num = "0987654321";
+        String lName = "Doe";
 
-        when(user.getId()).thenReturn(id);
-        when(user.getName()).thenReturn(name);
-        when(user.getEmail()).thenReturn(email);
-        when(user.getNum()).thenReturn(num);
+        User userUnderTest = new User(id, name, email, lName);
 
-        assertEquals(id, user.getId());
-        assertEquals(name, user.getName());
-        assertEquals(email, user.getEmail());
-        assertEquals(num, user.getNum());
-    }
-
-    @Test
-    void testSetEmailNull() {
-        assertThrows(IllegalArgumentException.class, () -> user.setEmail(null));
+        assertEquals(id, userUnderTest.getId());
+        assertEquals(name, userUnderTest.getName());
+        assertEquals(email, userUnderTest.getEmail());
+        assertEquals(lName, userUnderTest.getLName());
     }
 }
 ```
 
-In this test class, I've created a mock instance of the `User` class using Mockito and tested its constructor with valid parameters, as well as its getter methods. Additionally, I've added a separate test for setting an email to null to check if it throws an `IllegalArgumentException`.
+This test class checks the creation of a `User` object with valid values and tests the edge cases where the email and last name are null, as well as verifying the getters for each field. Additionally, it includes an exception scenario when trying to set the email or last name with a null value.

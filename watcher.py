@@ -31,12 +31,46 @@ class CodeChangeHandler(FileSystemEventHandler):
             self.commit_changes(event.src_path)
 
     def commit_changes(self, file_path):
-        repo.git.add(all=True)
-        commit_message = f"🤖 Auto-fix, docs, and tests for {os.path.basename(file_path)}"
-        repo.index.commit(commit_message)
-        origin = repo.remote(name="origin")
-        origin.push()
-        print(f"✅ Auto committed & pushed changes for: {file_path}")
+        """
+        Auto-commit and push file changes to GitHub safely.
+        Handles authentication, network, and branch fallback gracefully.
+        """
+
+        try:
+            # 1️⃣ Stage all modified files
+            repo.git.add(all=True)
+
+            # 2️⃣ Commit changes with clear message
+            commit_message = f"🤖 Auto-fix, docs, and tests for {os.path.basename(file_path)}"
+            repo.index.commit(commit_message)
+            print(f"✅ Committed changes for: {file_path}")
+
+            # 3️⃣ Identify the remote repo
+            try:
+                origin = repo.remote(name="origin")
+            except ValueError:
+                print("⚠️ No remote named 'origin' found. Adding one...")
+                repo.create_remote("origin", "https://github.com/SurajkhanPinjar/test-case-agent.git")
+                origin = repo.remote(name="origin")
+
+            # 4️⃣ Ensure on correct branch (main or ai-autofix)
+            current_branch = repo.active_branch.name
+            print(f"📂 Current branch: {current_branch}")
+
+            if current_branch not in ["main", "ai-autofix"]:
+                print("🔀 Switching to ai-autofix branch...")
+                repo.git.checkout("-B", "ai-autofix")
+
+            # 5️⃣ Try pushing to remote
+            try:
+                origin.push()
+                print("🚀 Changes pushed successfully!")
+            except Exception as push_err:
+                print(f"⚠️ Git push failed — {push_err}")
+                print("💡 Tip: check your Git credentials or network connection.")
+
+        except Exception as e:
+            print(f"❌ Commit operation failed: {e}")
 
 if __name__ == "__main__":
     print(f"🚀 Watching directory: {JAVA_SRC_DIR}")

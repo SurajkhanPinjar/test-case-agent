@@ -47,5 +47,5 @@ def generate_test_cases(java_file_path):
 
 if __name__ == "__main__":
     # Example usage (update path to your file)
-    generate_test_cases("src/main/java/com/example/service/UserService.java")
-    generate_test_cases("src/main/java/com/example/service/User.java")
+    generate_test_cases("../src/main/java/com/example/service/UserService.java")
+    generate_test_cases("../src/main/java/com/example/service/User.java")

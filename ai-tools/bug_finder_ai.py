@@ -66,5 +66,5 @@ def find_and_fix_bugs(java_file_path: str):
 
 if __name__ == "__main__":
     # Example file (update this path as needed)
-    find_and_fix_bugs("src/main/java/com/example/service/UserService.java")
-    find_and_fix_bugs("src/main/java/com/example/service/User.java")
+    find_and_fix_bugs("../src/main/java/com/example/service/UserService.java")
+    find_and_fix_bugs("../src/main/java/com/example/service/User.java")

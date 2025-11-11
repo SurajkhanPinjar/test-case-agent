@@ -40,4 +40,4 @@ def generate_javadoc(java_file_path):
 
 
 if __name__ == "__main__":
-    generate_javadoc("src/main/java/com/example/service/UserService.java")
+    generate_javadoc("../src/main/java/com/example/service/UserService.java")

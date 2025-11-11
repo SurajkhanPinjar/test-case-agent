@@ -1,51 +1,73 @@
 import subprocess
+import os
 
-def generate_test_cases(java_file_path):
+def run_ollama(model: str, prompt: str) -> str:
+    """
+    Executes Ollama model and returns clean text output.
+    Handles large prompts gracefully.
+    """
+    try:
+        result = subprocess.run(
+            ["ollama", "run", model, prompt],
+            capture_output=True, text=True, check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Ollama error: {e.stderr}")
+        return "Error: Ollama execution failed"
+
+
+def save_generated_tests(java_file_path: str, test_code: str):
+    """
+    Saves generated test cases into a /reviewed/ subfolder.
+    Creates folder automatically if missing.
+    """
+    base_dir = os.path.dirname(java_file_path)
+    reviewed_dir = os.path.join(base_dir, "reviewed")
+    os.makedirs(reviewed_dir, exist_ok=True)
+
+    filename = os.path.basename(java_file_path).replace(".java", "Test.java")
+    output_path = os.path.join(reviewed_dir, filename)
+
+    with open(output_path, "w") as f:
+        f.write(test_code)
+
+    print(f"💾 Saved generated test cases to: {output_path}")
+    return output_path
+
+
+def generate_test_cases(java_file_path: str):
     """
     AI Agent: Test Case Generator using Ollama (Mistral model)
-    Reads Java source code and generates JUnit test cases with Mockito.
+    Analyzes Java source code and generates JUnit test cases with Mockito.
     """
+    if not os.path.exists(java_file_path):
+        print(f"❌ File not found: {java_file_path}")
+        return
 
-    # 1️⃣ Read your Java source code file
     with open(java_file_path, "r") as f:
         java_source = f.read()
 
-    # 2️⃣ Prepare the prompt (you give the model your Java code)
     prompt = f"""
-    You are a professional AI Test Case Generator Agent.
+You are a professional AI Test Case Generator Agent.
 
-    Task:
-    - Analyze the given Java class
-    - Generate complete JUnit test cases using Mockito where needed
-    - Include edge cases, null checks, and exception scenarios
-    - Output only valid Java code for the test class
+Task:
+- Analyze the given Java class
+- Generate JUnit test cases using Mockito where needed
+- Include edge cases, null checks, and exception scenarios
+- Output only valid Java code for the test class
 
-    Java Source Code:
-    {java_source[:5000]}   # first 5000 chars of the file to avoid overflow
+Java Source Code:
+{java_source[:5000]}
     """
 
-    # 3️⃣ Run the Mistral model via Ollama
-    result = subprocess.run(
-        ["ollama", "run", "mistral", prompt],
-        capture_output=True, text=True
-    )
-
-    # 4️⃣ Get the generated test code
-    generated_tests = result.stdout.strip()
-
-    # 5️⃣ Print or save to file
-    print("\n✅ Generated Test Cases:\n")
-    print(generated_tests)
-
-    # Optional: save to a .java file automatically
-    output_path = java_file_path.replace(".java", "Test.java")
-    with open(output_path, "w") as f:
-        f.write(generated_tests)
-
-    print(f"\n💾 Saved test cases to: {output_path}")
+    print(f"🧪 Generating test cases for: {java_file_path}")
+    generated_tests = run_ollama("mistral", prompt)
+    reviewed_path = save_generated_tests(java_file_path, generated_tests)
+    print(f"✅ Test case generation complete: {reviewed_path}")
 
 
 if __name__ == "__main__":
     # Example usage (update path to your file)
-    generate_test_cases("../src/main/java/com/example/service/UserService.java")
-    generate_test_cases("../src/main/java/com/example/service/User.java")
+    generate_test_cases("src/main/java/com/example/service/UserService.java")
+    generate_test_cases("src/main/java/com/example/service/User.java")

@@ -4,13 +4,13 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    private String lName;
+    private String lame;
 
-    public User(Long id, String name, String email, String lName) {
+    public User(Long id, String name, String email, String lame) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.lName = lName;
+        this.lame = lame;
     }
 
     public Long getId() { return id; }
@@ -21,5 +21,5 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
-    public void setLName(String lName) { this.lName = lName; }
+    public void setLame(String lame) { this.lame = lame; }
 }

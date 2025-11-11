@@ -1,0 +1,11 @@
+ollama pull mistral
+ollama serve
+
+
+OLLAMA_MODEL=mistral
+OUTPUT_BASE=./generated-tests
+
+pip install javalang python-dotenv requests   // install the dep
+
+
+python3 generate_tests_ollama.py  //to run the agent

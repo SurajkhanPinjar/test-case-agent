@@ -19,11 +19,11 @@ def run_ollama(model: str, prompt: str) -> str:
 
 def save_documented_file(java_file_path: str, documented_code: str):
     """
-    Saves the generated JavaDoc-enhanced file inside a /reviewed subfolder.
+    Saves the generated JavaDoc-enhanced file inside:
+    src/main/java/com/example/reviewed/
     Creates folder automatically if missing.
     """
-    base_dir = os.path.dirname(java_file_path)
-    reviewed_dir = os.path.join(base_dir, "reviewed")
+    reviewed_dir = "src/main/java/com/example/reviewed"
     os.makedirs(reviewed_dir, exist_ok=True)
 
     filename = os.path.basename(java_file_path).replace(".java", "_JavaDoc.java")
@@ -67,6 +67,6 @@ Java Source Code:
 
 
 if __name__ == "__main__":
-    # Example usage — change as needed
+    # Example usage — only process /service files
     generate_javadoc("src/main/java/com/example/service/UserService.java")
     generate_javadoc("src/main/java/com/example/service/User.java")

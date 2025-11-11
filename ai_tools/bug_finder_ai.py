@@ -19,11 +19,10 @@ def run_ollama(model: str, prompt: str) -> str:
 
 def save_reviewed_file(java_file_path: str, output: str):
     """
-    Saves reviewed and optimized Java code inside a /reviewed subfolder
-    next to the original Java file.
+    Saves reviewed and optimized Java code inside:
+    src/main/java/com/example/reviewed/
     """
-    base_dir = os.path.dirname(java_file_path)
-    reviewed_dir = os.path.join(base_dir, "reviewed")
+    reviewed_dir = "src/main/java/com/example/reviewed"
     os.makedirs(reviewed_dir, exist_ok=True)
 
     filename = os.path.basename(java_file_path).replace(".java", "_BugReviewed.java")
@@ -42,7 +41,7 @@ def find_and_fix_bugs(java_file_path: str):
     ✅ Reads a Java file
     ✅ Identifies potential bugs & code smells
     ✅ Suggests fixes and optimized code
-    ✅ Saves result neatly inside /reviewed folder
+    ✅ Saves result neatly inside src/main/java/com/example/reviewed/
     """
     if not os.path.exists(java_file_path):
         print(f"❌ File not found: {java_file_path}")
@@ -79,6 +78,6 @@ Java Source Code:
 
 
 if __name__ == "__main__":
-    # Example usage — change as needed
+    # Example usage — only scans /service folder files
     find_and_fix_bugs("src/main/java/com/example/service/UserService.java")
     find_and_fix_bugs("src/main/java/com/example/service/User.java")

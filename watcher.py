@@ -9,7 +9,7 @@ from ai_tools.generate_tests_ollama import generate_test_cases
 from git import Repo
 
 # 🧠 CONFIG
-JAVA_SRC_DIR = "src/main/java"
+JAVA_SRC_DIR = "src/main/java/com/example/service/"
 GIT_REPO_PATH = "."   # path to your git repo
 repo = Repo(GIT_REPO_PATH)
 

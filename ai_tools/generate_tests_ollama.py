@@ -19,11 +19,11 @@ def run_ollama(model: str, prompt: str) -> str:
 
 def save_generated_tests(java_file_path: str, test_code: str):
     """
-    Saves generated test cases into a /reviewed/ subfolder.
+    Saves generated test cases inside:
+    src/main/java/com/example/reviewed/
     Creates folder automatically if missing.
     """
-    base_dir = os.path.dirname(java_file_path)
-    reviewed_dir = os.path.join(base_dir, "reviewed")
+    reviewed_dir = "src/main/java/com/example/reviewed"
     os.makedirs(reviewed_dir, exist_ok=True)
 
     filename = os.path.basename(java_file_path).replace(".java", "Test.java")
@@ -53,7 +53,7 @@ You are a professional AI Test Case Generator Agent.
 
 Task:
 - Analyze the given Java class
-- Generate JUnit test cases using Mockito where needed
+- Generate complete JUnit test cases using Mockito where needed
 - Include edge cases, null checks, and exception scenarios
 - Output only valid Java code for the test class
 
@@ -68,6 +68,6 @@ Java Source Code:
 
 
 if __name__ == "__main__":
-    # Example usage (update path to your file)
+    # Example usage (only scanning service files)
     generate_test_cases("src/main/java/com/example/service/UserService.java")
     generate_test_cases("src/main/java/com/example/service/User.java")

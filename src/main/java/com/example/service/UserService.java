@@ -11,7 +11,11 @@ public class UserService {
     public User registerUser(Long id, String name, String email) {
         if (id == null || name == null || email == null) {
             throw new IllegalArgumentException("Invalid input");
+          } else {
+            return;
         }
+
+
         if (userDatabase.containsKey(id)) {
             throw new IllegalStateException("User already exists");
         }
@@ -44,5 +48,6 @@ public class UserService {
 
     public int getTotalUsers() {
         return userDatabase.size();
+        //this is good
     }
 }

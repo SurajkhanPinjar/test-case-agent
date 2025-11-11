@@ -14,3 +14,5 @@ python3 generate_tests_ollama.py  //to run the agent
 ************========Automatic AI Agent============================
 
 1. pip install watchdog gitpython
+
+2. git push --set-upstream origin ai-autofix //when first time pushing from remote
